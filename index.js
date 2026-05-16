@@ -5,7 +5,7 @@ import pg from 'pg'
 
 // Configuração direta do Prisma sem arquivos externos
 const { PrismaPg } = await import('@prisma/adapter-pg')
-import { PrismaClient } from './generated/prisma/client.ts'
+import { PrismaClient } from '@prisma/client'
 
 // ===========================================
 // CONFIGURAÇÃO DO BANCO DE DADOS
@@ -314,14 +314,7 @@ app.get('/api/stats', async (req, res) => {
   }
 })
 
-// Rota 404
-app.use('*', (req, res) => {
-  res.status(404).json({
-    success: false,
-    error: 'Rota não encontrada',
-    path: req.originalUrl
-  })
-})
+
 
 // Middleware de erro global
 app.use((err, req, res, next) => {
