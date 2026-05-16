@@ -1,5 +1,5 @@
 {
-  "name": "salvar",
+  "name": "thais-backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,9 @@
     "dev": "node index.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "build": "npx prisma generate && echo 'Build concluído!'",
+    "start": "node salvar/index.js"
   },
   "repository": {
     "type": "git",
