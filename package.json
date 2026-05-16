@@ -10,7 +10,7 @@
     "prisma:migrate": "prisma migrate dev --name init",
     "prisma:studio": "prisma studio",
     "build": "npx prisma generate && echo 'Build concluído!'",
-    "start": "node salvar/index.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
