@@ -5,7 +5,7 @@ import pg from 'pg'
 
 // Configuração direta do Prisma sem arquivos externos
 const { PrismaPg } = await import('@prisma/adapter-pg')
-import { PrismaClient } from './prisma-client/client.js'
+import { PrismaClient } from './prisma-client/client.ts'
 
 // ===========================================
 // CONFIGURAÇÃO DO BANCO DE DADOS
