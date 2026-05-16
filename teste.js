@@ -2,11 +2,11 @@ import chalk from 'chalk'
 import fs from 'fs/promises'
 import path from 'path'
 
-// Configurações
-const API_URL = 'http://localhost:3333'
-const LOG_FILE = './logs/teste-log.json'
+// Configurações - API em PRODUÇÃO
+const API_URL = 'https://thaicnutriback.onrender.com'
+const LOG_FILE = './logs/teste-producao-log.json'
 
-// Cores para logs (usando chalk)
+// Cores para logs
 const log = {
   info: (msg) => console.log(chalk.blue('ℹ️ ') + chalk.blue(msg)),
   success: (msg) => console.log(chalk.green('✅ ') + chalk.green(msg)),
@@ -17,9 +17,10 @@ const log = {
   data: (data) => console.log(chalk.cyan(JSON.stringify(data, null, 2)))
 }
 
-// Armazenar resultados dos testes
+// Armazenar resultados
 const resultados = {
   inicio: new Date().toISOString(),
+  api_url: API_URL,
   tests: [],
   resumo: {
     total: 0,
@@ -29,7 +30,7 @@ const resultados = {
   }
 }
 
-// Função para salvar log
+// Salvar log
 async function salvarLog() {
   try {
     const dir = './logs'
@@ -41,7 +42,7 @@ async function salvarLog() {
   }
 }
 
-// Função para testar com tratamento de erro inteligente
+// Função de teste com timeout
 async function testarEndpoint(nome, metodo, endpoint, dados = null, expectedStatus = 200) {
   const testResult = {
     nome,
@@ -60,12 +61,16 @@ async function testarEndpoint(nome, metodo, endpoint, dados = null, expectedStat
     log.api(`\n📡 Testando: ${nome}`)
     log.debug(`${metodo} ${endpoint}`)
     
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 segundos timeout
+    
     const options = {
       method: metodo,
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': 'Test-Suite/1.0'
-      }
+        'User-Agent': 'Production-Test-Suite/1.0'
+      },
+      signal: controller.signal
     }
     
     if (dados && (metodo === 'POST' || metodo === 'PUT')) {
@@ -74,6 +79,8 @@ async function testarEndpoint(nome, metodo, endpoint, dados = null, expectedStat
     }
     
     const response = await fetch(`${API_URL}${endpoint}`, options)
+    clearTimeout(timeoutId)
+    
     const duracao = Date.now() - inicio
     testResult.duracao = `${duracao}ms`
     
@@ -88,17 +95,15 @@ async function testarEndpoint(nome, metodo, endpoint, dados = null, expectedStat
       testResult.resposta = { texto: responseData }
     }
     
-    // Verificar status esperado
     if (response.status === expectedStatus) {
       testResult.status = 'passed'
       resultados.resumo.passou++
       log.success(`✓ Sucesso! Status: ${response.status} (${duracao}ms)`)
       
-      // Log detalhado da resposta (apenas para sucesso)
       if (responseData && typeof responseData === 'object') {
         if (responseData.data) {
           log.data({ data: responseData.data })
-        } else {
+        } else if (nome === 'Health Check') {
           log.data(responseData)
         }
       }
@@ -122,24 +127,24 @@ async function testarEndpoint(nome, metodo, endpoint, dados = null, expectedStat
     const duracao = Date.now() - inicio
     testResult.duracao = `${duracao}ms`
     testResult.status = 'failed'
-    testResult.error = error.message
+    
+    if (error.name === 'AbortError') {
+      testResult.error = 'Timeout após 10 segundos'
+      log.error(`✗ Timeout! O servidor demorou muito para responder`)
+    } else if (error.code === 'ENOTFOUND') {
+      testResult.error = `URL não encontrada: ${API_URL}`
+      log.error(`✗ Servidor não encontrado! Verifique se a URL está correta`)
+    } else {
+      testResult.error = error.message
+      log.error(`✗ Erro: ${error.message}`)
+    }
+    
     resultados.resumo.falhou++
     resultados.resumo.erros.push({
       test: nome,
       error: error.message,
       stack: error.stack
     })
-    
-    log.error(`✗ Erro crítico! ${error.message}`)
-    
-    if (error.code === 'ECONNREFUSED') {
-      log.error(`Servidor não está rodando em ${API_URL}`)
-      log.error(`Certifique-se de executar 'node index.js' primeiro`)
-    } else if (error.code === 'ENOTFOUND') {
-      log.error(`URL inválida ou sem conexão com a internet`)
-    } else {
-      log.debug(error.stack)
-    }
   }
   
   resultados.tests.push(testResult)
@@ -147,174 +152,116 @@ async function testarEndpoint(nome, metodo, endpoint, dados = null, expectedStat
   return testResult
 }
 
-// Função principal de testes
+// Função principal
 async function executarTestes() {
   console.clear()
   console.log(chalk.bold.cyan('\n╔═══════════════════════════════════════════════════════════╗'))
-  console.log(chalk.bold.cyan('║     🧪 TESTE INTELIGENTE DA API PRISMA + POSTGRES       ║'))
+  console.log(chalk.bold.cyan('║     🧪 TESTE DE PRODUÇÃO - API PRISMA + POSTGRES        ║'))
   console.log(chalk.bold.cyan('╚═══════════════════════════════════════════════════════════╝\n'))
   
-  log.info(`API URL: ${API_URL}`)
-  log.info(`Iniciando suite de testes em: ${new Date().toLocaleString()}\n`)
+  log.info(`🌐 API URL: ${API_URL}`)
+  log.info(`📅 Início: ${new Date().toLocaleString()}\n`)
   
-  // Verificar se o servidor está online
-  log.info('Verificando conectividade com o servidor...')
+  // Verificar conectividade
+  log.info('Verificando conectividade com o servidor de produção...')
   try {
-    const healthCheck = await fetch(`${API_URL}/health`)
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 5000)
+    
+    const healthCheck = await fetch(`${API_URL}/health`, { signal: controller.signal })
+    clearTimeout(timeoutId)
+    
     if (healthCheck.ok) {
-      log.success('Servidor está online!')
+      log.success('✅ Servidor de produção está ONLINE!')
       const healthData = await healthCheck.json()
+      log.debug(`Status: ${healthData.status}`)
+      log.debug(`Database: ${healthData.database}`)
       log.debug(`Uptime: ${healthData.uptime?.toFixed(2)}s`)
     } else {
       log.error('Servidor respondeu com erro!')
     }
   } catch (error) {
-    log.error(`Servidor offline: ${error.message}`)
-    log.error('\n💡 Solução: Execute "node index.js" em outro terminal primeiro!\n')
+    log.error(`❌ Servidor OFFLINE ou inacessível: ${error.message}`)
+    log.error('\n💡 Possíveis causas:')
+    log.error('   • O servidor pode estar desligado no Render')
+    log.error('   • URL pode estar incorreta')
+    log.error('   • Pode ter excedido o limite de requisições gratuitas')
+    log.error('   • O plano gratuito do Render pode ter entrado em hibernação')
+    log.error('\n💡 Soluções:')
+    log.error('   • Acesse https://dashboard.render.com e verifique o status')
+    log.error('   • O servidor pode levar 30-60 segundos para acordar do hibernação')
+    log.error('   • Execute o teste novamente após 1 minuto\n')
     await salvarLog()
     process.exit(1)
   }
   
-  // 1. TESTE DE HEALTH CHECK
-  await testarEndpoint(
-    'Health Check',
-    'GET',
-    '/health',
-    null,
-    200
-  )
+  // Testes básicos (CRUD)
+  await testarEndpoint('Health Check', 'GET', '/health', null, 200)
+  await testarEndpoint('Listar Leads', 'GET', '/api/leads', null, 200)
   
-  // 2. LISTAR LEADS (inicialmente vazio)
-  await testarEndpoint(
-    'Listar Leads (inicial)',
-    'GET',
-    '/api/leads',
-    null,
-    200
-  )
-  
-  // 3. CRIAR LEAD VÁLIDO
-  const leadValido = {
-    nome: "Maria Teste Silva",
-    telefone: "5585999888777",
-    mensagem: "Teste automatizado com validação",
-    genero: "Feminino",
-    idade: "35 a 44 anos",
-    desafio: "Estresse e ansiedade",
-    energia: "Média",
-    compromisso: "Alto",
-    origem: "teste_automatizado",
-    pagina: "teste_integracao"
+  // Criar lead de teste
+  const leadTeste = {
+    nome: "Teste Produção Render",
+    telefone: "5585999999999",
+    mensagem: "Testando API em produção no Render",
+    genero: "Masculino",
+    idade: "25 a 34 anos",
+    desafio: "Teste de deploy",
+    energia: "Alta",
+    compromisso: "Total",
+    origem: "teste_producao",
+    pagina: "render_test"
   }
   
   const criarLead = await testarEndpoint(
-    'Criar Lead Válido',
+    'Criar Lead (Produção)',
     'POST',
     '/api/leads',
-    leadValido,
+    leadTeste,
     201
   )
   
   let leadId = null
-  if (criarLead.resposta && criarLead.resposta.data && criarLead.resposta.data.id) {
+  if (criarLead.resposta?.data?.id) {
     leadId = criarLead.resposta.data.id
     log.success(`Lead criado com ID: ${leadId}`)
   }
   
-  // 4. CRIAR LEAD INVÁLIDO (sem nome)
-  await testarEndpoint(
-    'Criar Lead Inválido (sem nome)',
-    'POST',
-    '/api/leads',
-    { telefone: "5585999999999" },
-    400
-  )
-  
-  // 5. CRIAR LEAD INVÁLIDO (sem telefone)
-  await testarEndpoint(
-    'Criar Lead Inválido (sem telefone)',
-    'POST',
-    '/api/leads',
-    { nome: "Teste Incompleto" },
-    400
-  )
-  
-  // 6. BUSCAR LEAD POR ID (se existir)
+  // Testes condicionais (se o lead foi criado)
   if (leadId) {
-    await testarEndpoint(
-      'Buscar Lead por ID',
-      'GET',
-      `/api/leads/${leadId}`,
-      null,
-      200
-    )
-    
-    // 7. BUSCAR ID INEXISTENTE
-    await testarEndpoint(
-      'Buscar ID Inexistente',
-      'GET',
-      '/api/leads/99999',
-      null,
-      404
-    )
-    
-    // 8. ATUALIZAR LEAD
-    const atualizacao = {
-      nome: "Maria Teste Atualizada",
-      mensagem: "Dados atualizados pelo teste automatizado",
-      energia: "Alta total"
-    }
-    
-    await testarEndpoint(
-      'Atualizar Lead',
-      'PUT',
-      `/api/leads/${leadId}`,
-      atualizacao,
-      200
-    )
-    
-    // 9. VERIFICAR ATUALIZAÇÃO
-    await testarEndpoint(
-      'Verificar Atualização',
-      'GET',
-      `/api/leads/${leadId}`,
-      null,
-      200
-    )
+    await testarEndpoint('Buscar Lead por ID', 'GET', `/api/leads/${leadId}`, null, 200)
+    await testarEndpoint('Atualizar Lead', 'PUT', `/api/leads/${leadId}`, {
+      nome: "Teste Produção Atualizado",
+      mensagem: "Dados atualizados via teste de produção"
+    }, 200)
+    await testarEndpoint('Verificar Atualização', 'GET', `/api/leads/${leadId}`, null, 200)
   }
   
-  // 10. LISTAR LEADS COM PAGINAÇÃO
-  await testarEndpoint(
-    'Listar Leads (página 1)',
-    'GET',
-    '/api/leads?page=1&limit=5',
-    null,
-    200
-  )
+  // Testes de validação
+  await testarEndpoint('Lead Inválido (sem nome)', 'POST', '/api/leads', { telefone: "123" }, 400)
+  await testarEndpoint('Lead Inválido (sem telefone)', 'POST', '/api/leads', { nome: "Teste" }, 400)
+  await testarEndpoint('Buscar ID Inexistente', 'GET', '/api/leads/99999', null, 404)
   
-  // 11. ESTATÍSTICAS
-  await testarEndpoint(
-    'Estatísticas da API',
-    'GET',
-    '/api/stats',
-    null,
-    200
-  )
+  // Testes de listagem
+  await testarEndpoint('Listar Leads (paginado)', 'GET', '/api/leads?page=1&limit=5', null, 200)
   
-  // 12. ROTA INEXISTENTE (404)
-  await testarEndpoint(
-    'Rota Inexistente (404)',
-    'GET',
-    '/api/rota_que_nao_existe',
-    null,
-    404
-  )
+  // Estatísticas
+  await testarEndpoint('Estatísticas da API', 'GET', '/api/stats', null, 200)
   
-  // 13. TESTE DE CARGA RÁPIDA (opcional)
-  log.info('\n📊 Teste rápido de carga (3 requisições simultâneas)...')
+  // Rota 404
+  await testarEndpoint('Rota Inexistente', 'GET', '/api/rota_que_nao_existe', null, 404)
+  
+  // Limpeza (deletar lead criado)
+  if (leadId) {
+    await testarEndpoint('Deletar Lead (limpeza)', 'DELETE', `/api/leads/${leadId}`, null, 200)
+    await testarEndpoint('Verificar Deleção', 'GET', `/api/leads/${leadId}`, null, 404)
+  }
+  
+  // Teste de carga leve
+  log.info('\n📊 Teste rápido de carga (5 requisições)...')
   const cargaStart = Date.now()
   const promises = []
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 5; i++) {
     promises.push(
       fetch(`${API_URL}/api/leads?limit=1`)
         .then(res => res.json())
@@ -324,88 +271,62 @@ async function executarTestes() {
   }
   await Promise.all(promises)
   const cargaDuracao = Date.now() - cargaStart
-  log.success(`Teste de carga concluído em ${cargaDuracao}ms`)
+  log.success(`Teste de carga concluído em ${cargaDuracao}ms (média: ${(cargaDuracao/5).toFixed(0)}ms/req)`)
   
-  // 14. DELETAR LEAD (limpeza)
-  if (leadId) {
-    await testarEndpoint(
-      'Deletar Lead (limpeza)',
-      'DELETE',
-      `/api/leads/${leadId}`,
-      null,
-      200
-    )
-    
-    // Verificar se foi deletado
-    await testarEndpoint(
-      'Verificar Deleção',
-      'GET',
-      `/api/leads/${leadId}`,
-      null,
-      404
-    )
-  }
-  
-  // ===========================================
   // RESUMO FINAL
-  // ===========================================
   console.log(chalk.bold('\n╔═══════════════════════════════════════════════════════════╗'))
-  console.log(chalk.bold('║                    📊 RESUMO DOS TESTES                  ║'))
+  console.log(chalk.bold('║              📊 RESUMO DOS TESTES (PRODUÇÃO)             ║'))
   console.log(chalk.bold('╚═══════════════════════════════════════════════════════════╝\n'))
   
   resultados.fim = new Date().toISOString()
   const duracaoTotal = new Date(resultados.fim) - new Date(resultados.inicio)
   
+  console.log(chalk.white(`🌐 API: ${API_URL}`))
   console.log(chalk.white(`⏱️  Duração total: ${(duracaoTotal / 1000).toFixed(2)}s`))
-  console.log(chalk.white(`📝 Total de testes: ${resultados.resumo.total}`))
+  console.log(chalk.white(`📝 Testes executados: ${resultados.resumo.total}`))
   console.log(chalk.green(`✅ Passaram: ${resultados.resumo.passou}`))
   console.log(chalk.red(`❌ Falharam: ${resultados.resumo.falhou}`))
   
   const percentual = (resultados.resumo.passou / resultados.resumo.total * 100).toFixed(1)
   
   if (resultados.resumo.falhou === 0) {
-    console.log(chalk.green.bold(`\n🎉 SUCESSO! 100% dos testes passaram! (${percentual}%)\n`))
+    console.log(chalk.green.bold(`\n🎉 SUCESSO! API em produção está 100% funcional! (${percentual}%)\n`))
   } else {
     console.log(chalk.yellow(`\n⚠️  Taxa de sucesso: ${percentual}%\n`))
     
     if (resultados.resumo.erros.length > 0) {
       console.log(chalk.red('🔴 ERROS DETECTADOS:'))
       resultados.resumo.erros.forEach((erro, index) => {
-        console.log(chalk.red(`\n  ${index + 1}. ${erro.test}`))
+        console.log(chalk.red(`  ${index + 1}. ${erro.test}`))
         console.log(chalk.red(`     ${erro.error || JSON.stringify(erro.response)}`))
       })
     }
   }
   
-  // Dicas de solução
-  if (resultados.resumo.falhou > 0) {
-    console.log(chalk.cyan('\n💡 DICAS DE SOLUÇÃO:'))
-    console.log(chalk.white('  • Verifique se o servidor está rodando (node index.js)'))
-    console.log(chalk.white('  • Confirme se o banco de dados está conectado'))
-    console.log(chalk.white('  • Verifique as variáveis de ambiente no .env'))
-    console.log(chalk.white('  • Execute "npx prisma generate" para regenerar o cliente'))
-    console.log(chalk.white('  • Veja os logs completos em: ' + LOG_FILE))
+  // Dicas de performance
+  console.log(chalk.cyan('\n📊 MÉTRICAS DE PERFORMANCE:'))
+  const tempos = resultados.tests.filter(t => t.duracao).map(t => parseInt(t.duracao))
+  const media = tempos.reduce((a,b) => a + b, 0) / tempos.length
+  const max = Math.max(...tempos)
+  const min = Math.min(...tempos)
+  
+  console.log(chalk.white(`  ⚡ Tempo médio: ${media.toFixed(0)}ms`))
+  console.log(chalk.white(`  🚀 Mais rápido: ${min}ms`))
+  console.log(chalk.white(`  🐢 Mais lento: ${max}ms`))
+  
+  if (max > 3000) {
+    console.log(chalk.yellow(`  ⚠️ Algumas requisições estão lentas (>3s). Pode ser hibernação do Render.`))
   }
   
-  // Salvar log
   await salvarLog()
   
-  console.log(chalk.gray('\n✨ Teste finalizado! ✨\n'))
-  
-  // Exit code baseado no sucesso
+  console.log(chalk.gray('\n✨ Teste de produção finalizado! ✨\n'))
   process.exit(resultados.resumo.falhou === 0 ? 0 : 1)
 }
 
-// Tratamento de erros globais
-process.on('unhandledRejection', (error) => {
-  log.error(`Erro não tratado: ${error.message}`)
-  salvarLog()
-  process.exit(1)
-})
-
-// Executar testes
+// Executar
 executarTestes().catch(async (error) => {
-  log.error(`Erro fatal na execução dos testes: ${error.message}`)
+  log.error(`Erro fatal: ${error.message}`)
   await salvarLog()
   process.exit(1)
 })

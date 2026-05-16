@@ -69,7 +69,77 @@ async function criarTabelaSeNaoExistir() {
 // ===========================================
 // ROTAS DA API
 // ===========================================
-
+// ===========================================
+// ROTA ESPECÍFICA PARA O QUIZ (frontend)
+// ===========================================
+app.post('/salvarpacienteprevenda', async (req, res) => {
+  try {
+    console.log('📥 Recebendo dados do quiz:', req.body);
+    
+    const {
+      nome,
+      telefone,
+      email,
+      mensagem,
+      genero,
+      idade,
+      desafio,
+      energia,
+      compromisso,
+      userAgent,
+      origem,
+      pagina
+    } = req.body;
+    
+    // Validação básica
+    if (!nome || nome.trim().length < 3) {
+      return res.status(400).json({
+        success: false,
+        error: 'Nome é obrigatório e deve ter pelo menos 3 caracteres'
+      });
+    }
+    
+    if (!telefone || telefone.length < 10) {
+      return res.status(400).json({
+        success: false,
+        error: 'Telefone é obrigatório'
+      });
+    }
+    
+    // Salvar no banco de dados usando Prisma
+    const novoLead = await prisma.pacientePrevenda.create({
+      data: {
+        nome: nome.trim(),
+        telefone: telefone,
+        mensagem: mensagem || null,
+        genero: genero || null,
+        idade: idade || null,
+        desafio: desafio || null,
+        energia: energia || null,
+        compromisso: compromisso || null,
+        userAgent: userAgent || req.get('user-agent') || 'Quiz Frontend',
+        origem: origem || 'quiz_mapeamento',
+        pagina: pagina || 'formulario_contato',
+      }
+    });
+    
+    console.log('✅ Lead salvo com sucesso:', novoLead.id);
+    
+    res.status(201).json({
+      success: true,
+      message: 'Lead salvo com sucesso',
+      data: novoLead
+    });
+    
+  } catch (error) {
+    console.error('❌ Erro ao salvar lead do quiz:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Erro interno ao salvar dados',
+      message: error.message
+    });
+  }
+});
 // Health check
 app.get('/health', (req, res) => {
   res.json({
