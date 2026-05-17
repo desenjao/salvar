@@ -72,6 +72,10 @@ async function criarTabelaSeNaoExistir() {
 // ===========================================
 // ROTA ESPECÍFICA PARA O QUIZ (frontend)
 // ===========================================
+// Se for Express
+app.head('/', (req, res) => {
+  res.status(200).end();
+});
 app.post('/salvarpacienteprevenda', async (req, res) => {
   try {
     console.log('📥 Recebendo dados do quiz:', req.body);
