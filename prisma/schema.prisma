@@ -1,13 +1,15 @@
 generator client {
   provider = "prisma-client"
   output   = "../prisma-client"
-
 }
 
 datasource db {
   provider = "postgresql"
 }
 
+// ===========================================
+// TABELA ORIGINAL - QUIZ DE MAPEAMENTO ALIMENTAR
+// ===========================================
 model PacientePrevenda {
   id          Int      @id @default(autoincrement())
   nome        String
@@ -18,10 +20,36 @@ model PacientePrevenda {
   desafio     String
   energia     String
   compromisso String
+  
   userAgent   String?
   origem      String?
   pagina      String   @default("quiz")
   status      String   @default("prevenda")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+// ===========================================
+// NOVA TABELA - QUIZ DA TPM (SEMANA DA TPM)
+// ===========================================
+model PacienteTPM {
+  id          Int      @id @default(autoincrement())
+  nome        String
+  telefone    String
+  email       String?   // Email específico para contato
+  mensagem    String?   // Mensagem adicional da usuária
+  
+  // Campos específicos da TPM
+  faseTpm     String?   // Como a TPM costuma te afetar
+  compulsao   String?   // Sintoma que mais incomoda (vontade de doce, ansiedade, cansaço, inchaço)
+  alimentacao String?   // Alimentação piora na TPM? (sim, um pouco, só à noite, não)
+  emocional   String?   // Como fica emocionalmente (sensível, sem paciência, desanimada, fora de si)
+  objetivo    String?   // O que gostaria de melhorar (parar compulsão, reduzir inchaço, controlar irritação, ter mais energia)
+  
+  userAgent   String?
+  origem      String?   @default("quiz_semana_tpm")
+  pagina      String?   @default("analise_tpm")
+  status      String    @default("novo")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }

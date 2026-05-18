@@ -72,10 +72,101 @@ async function criarTabelaSeNaoExistir() {
 // ===========================================
 // ROTA ESPECÍFICA PARA O QUIZ (frontend)
 // ===========================================
+
+
 // Se for Express
 app.head('/', (req, res) => {
   res.status(200).end();
 });
+
+// ===========================================
+// ROTA PARA TPM - USANDO TABELA PACIENTETPM
+// ===========================================
+app.post('/api/tpm/leads', async (req, res) => {
+  try {
+    console.log('📥 [TPM] Recebendo dados do quiz:', req.body);
+    
+    const {
+      nome,
+      telefone,
+      email,
+      mensagem,
+      fase_tpm,
+      compulsao,
+      alimentacao,
+      emocional,
+      objetivo,
+      userAgent,
+      origem,
+      pagina
+    } = req.body;
+    
+    // Validação básica
+    if (!nome || nome.trim().length < 3) {
+      return res.status(400).json({
+        success: false,
+        error: 'Nome é obrigatório e deve ter pelo menos 3 caracteres'
+      });
+    }
+    
+    if (!telefone || telefone.replace(/\D/g, '').length < 10) {
+      return res.status(400).json({
+        success: false,
+        error: 'Telefone é obrigatório e deve ter pelo menos 10 dígitos'
+      });
+    }
+    
+    // CORREÇÃO: Salvar na tabela PacienteTPM (NOVA TABELA)
+    const novoLead = await prisma.pacienteTPM.create({
+      data: {
+        nome: nome.trim(),
+        telefone: telefone,
+        email: email || null,
+        mensagem: mensagem || null,
+        faseTpm: fase_tpm || null,
+        compulsao: compulsao || null,
+        alimentacao: alimentacao || null,
+        emocional: emocional || null,
+        objetivo: objetivo || null,
+        userAgent: userAgent || req.get('user-agent') || 'TPM Quiz',
+        origem: origem || 'quiz_semana_tpm',
+        pagina: pagina || 'analise_tpm',
+        status: 'novo'
+      }
+    });
+    
+    console.log('✅ [TPM] Lead salvo com sucesso ID:', novoLead.id);
+    
+    res.status(201).json({
+      success: true,
+      message: 'Análise da TPM salva com sucesso!',
+      data: {
+        id: novoLead.id,
+        nome: novoLead.nome,
+        createdAt: novoLead.createdAt
+      }
+    });
+    
+  } catch (error) {
+    console.error('❌ [TPM] Erro ao salvar lead:', error);
+    
+    // Verificar se é erro de tabela não existe
+    if (error.message.includes('pacienteTPM')) {
+      return res.status(500).json({
+        success: false,
+        error: 'Tabela PacienteTPM não encontrada. Execute as migrações primeiro.',
+        message: 'Rode: npx prisma migrate dev --name add_tabela_tpm'
+      });
+    }
+    
+    res.status(500).json({
+      success: false,
+      error: 'Erro interno ao salvar análise da TPM',
+      message: error.message
+    });
+  }
+});
+
 app.post('/salvarpacienteprevenda', async (req, res) => {
   try {
     console.log('📥 Recebendo dados do quiz:', req.body);
