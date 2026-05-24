@@ -166,7 +166,74 @@ app.post('/api/tpm/leads', async (req, res) => {
     });
   }
 });
+// ===========================================
+// ROTA PARA DASHBOARD - LISTAR LEADS DA TPM
+// ===========================================
+app.get('/api/tpm/leads', async (req, res) => {
+  try {
+    // 1. Captura parâmetros de busca, paginação e filtro da URL (Query String)
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    
+    const { status, origem, busca } = req.query;
 
+    // 2. Monta o objeto de filtro dinâmico
+    const onde = {};
+
+    if (status) {
+      onde.status = status;
+    }
+
+    if (origem) {
+      onde.origem = origem;
+    }
+
+    if (busca) {
+      onde.OR = [
+        { nome: { contains: busca, mode: 'insensitive' } },
+        { telefone: { contains: busca } },
+        { email: { contains: busca, mode: 'insensitive' } }
+      ];
+    }
+
+    // 3. Executa a busca no banco e conta o total de registros em paralelo (Performance)
+    const [leads, totalLeads] = await prisma.$transaction([
+      prisma.pacienteTPM.findMany({
+        where: onde,
+        skip: skip,
+        take: limit,
+        orderBy: {
+          createdAt: 'desc' // Leads mais novos aparecem primeiro no dashboard
+        }
+      }),
+      prisma.pacienteTPM.count({ where: onde })
+    ]);
+
+    console.log(`📊 [TPM Dashboard] Retornando ${leads.length} leads (Total: ${totalLeads})`);
+
+    // 4. Resposta com metadados de paginação estruturados para o Front-end
+    res.status(200).json({
+      success: true,
+      data: leads,
+      pagination: {
+        totalItems: totalLeads,
+        currentPage: page,
+        itemsPerPage: limit,
+        totalPages: Math.ceil(totalLeads / limit)
+      }
+    });
+
+  } catch (error) {
+    console.error('❌ [TPM Dashboard] Erro ao buscar leads:', error);
+    
+    res.status(500).json({
+      success: false,
+      error: 'Erro interno ao carregar a listagem do dashboard',
+      message: error.message
+    });
+  }
+});
 app.post('/salvarpacienteprevenda', async (req, res) => {
   try {
     console.log('📥 Recebendo dados do quiz:', req.body);
