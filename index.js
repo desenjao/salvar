@@ -275,7 +275,70 @@ app.get('/api/namorados/quiz', async (req, res) => {
     });
   }
 });
+// ========== NOVA ROTA: Buscar dados do presente para quem RECEBEU ==========
+// Rota: GET /api/namorados/presente/:casalId
+app.get('/api/namorados/presente/:casalId', async (req, res) => {
+  try {
+    const { casalId } = req.params;
 
+    // Busca o casal com as respostas
+    const casal = await prisma.casal.findUnique({
+      where: { id: casalId },
+      include: { respostas: true }
+    });
+
+    if (!casal) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Presente não encontrado. Link inválido ou expirado.' 
+      });
+    }
+
+    // Encontra quem enviou o presente (COMPRADOR)
+    const comprador = casal.respostas.find(r => r.tipoUsuario === 'COMPRADOR');
+    
+    // Verifica se a pessoa que recebeu já respondeu
+    const presenteado = casal.respostas.find(r => r.tipoUsuario === 'PRESENTEADO');
+    const jaRespondeu = !!presenteado;
+
+    if (!comprador) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Dados do presente incompletos. Peça para a pessoa recriar o presente.' 
+      });
+    }
+
+    // Retorna APENAS o que a página de "presente recebido" precisa ver
+    return res.status(200).json({
+      success: true,
+      data: {
+        id: casal.id,
+        status: casal.status,
+        mensagemPresente: casal.mensagem, // mensagem que o comprador escreveu
+        criadoEm: casal.createdAt,
+        
+        // Dados de quem enviou o presente (só o nome, por segurança)
+        de: {
+          nome: comprador.nome
+        },
+        
+        // Se a pessoa já respondeu ou não
+        jaRespondeu: jaRespondeu,
+        
+        // Se já estiver completo, avisa
+        estaCompleto: casal.status === 'COMPLETED'
+      }
+    });
+
+  } catch (error) {
+    console.error('❌ [Presente Recebido] Erro:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Erro interno ao carregar o presente.',
+      message: error.message
+    });
+  }
+});
 // ===========================================
 // ROTA PARA SALVAR LEAD DA TPM (POST)
 // ===========================================
