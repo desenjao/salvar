@@ -83,34 +83,29 @@ app.post('/api/namorados/quiz', async (req, res) => {
     console.log('📥 [Namorados] Recebendo dados:', req.body);
     
     const {
-      casalId,           // Se veio de um link compartilhado
-      tipoUsuario,       // 'COMPRADOR' ou 'PRESENTEADO'
+      casalId,           
+      tipoUsuario,       
       nome,
       telefone,
       email,
-      anamnese,          // JSON com respostas da anamnese
-      relacionamento,    // JSON com respostas sobre o relacionamento
-      mensagem           // Apenas o comprador envia
+      anamnese,          
+      relacionamento,    
+      mensagem           
     } = req.body;
     
     // Validações básicas
     if (!nome || nome.trim().length < 3) {
-      return res.status(400).json({
-        success: false,
-        error: 'Nome é obrigatório'
-      });
+      return res.status(400).json({ success: false, error: 'Nome é obrigatório' });
     }
     
     if (!tipoUsuario || !['COMPRADOR', 'PRESENTEADO'].includes(tipoUsuario)) {
-      return res.status(400).json({
-        success: false,
-        error: 'Tipo de usuário inválido'
-      });
+      return res.status(400).json({ success: false, error: 'Tipo de usuário inválido' });
     }
     
+    // --------------------------------------------------------------------
     // CASO 1: Comprador iniciando (sem casalId)
+    // --------------------------------------------------------------------
     if (!casalId && tipoUsuario === 'COMPRADOR') {
-      // Cria o casal e a resposta do comprador em uma transação
       const result = await prisma.$transaction(async (tx) => {
         const novoCasal = await tx.casal.create({
           data: {
@@ -119,6 +114,7 @@ app.post('/api/namorados/quiz', async (req, res) => {
           }
         });
         
+        // Alinhado com o model 'Resposta' no singular do seu schema
         const resposta = await tx.resposta.create({
           data: {
             casalId: novoCasal.id,
@@ -142,47 +138,34 @@ app.post('/api/namorados/quiz', async (req, res) => {
       });
     }
     
+    // --------------------------------------------------------------------
     // CASO 2: Presenteado respondendo (com casalId)
+    // --------------------------------------------------------------------
     if (casalId && tipoUsuario === 'PRESENTEADO') {
-      // Verifica se o casal existe e está pendente
+      // Alinhado com a relação 'respostas' no plural do seu model Casal
       const casal = await prisma.casal.findUnique({
         where: { id: casalId },
-        include: { respostas: true }
+        include: { respostas: true } 
       });
       
       if (!casal) {
-        return res.status(404).json({
-          success: false,
-          error: 'Link inválido. Presente não encontrado.'
-        });
+        return res.status(404).json({ success: false, error: 'Link inválido. Presente não encontrado.' });
       }
       
       if (casal.status === 'COMPLETED') {
-        return res.status(400).json({
-          success: false,
-          error: 'Este presente já foi resgatado!'
-        });
+        return res.status(400).json({ success: false, error: 'Este presente já foi resgatado!' });
       }
       
-      // Verifica se o comprador já respondeu
       const compradorRespondeu = casal.respostas.some(r => r.tipoUsuario === 'COMPRADOR');
       if (!compradorRespondeu) {
-        return res.status(400).json({
-          success: false,
-          error: 'Aguardando o criador do presente responder primeiro.'
-        });
+        return res.status(400).json({ success: false, error: 'Aguardando o criador do presente responder primeiro.' });
       }
       
-      // Verifica se o presenteado já não respondeu (evita duplicidade)
       const presenteadoJaRespondeu = casal.respostas.some(r => r.tipoUsuario === 'PRESENTEADO');
       if (presenteadoJaRespondeu) {
-        return res.status(400).json({
-          success: false,
-          error: 'Você já respondeu este presente!'
-        });
+        return res.status(400).json({ success: false, error: 'Você já respondeu este presente!' });
       }
       
-      // Salva a resposta do presenteado
       const resposta = await prisma.resposta.create({
         data: {
           casalId: casalId,
@@ -195,13 +178,11 @@ app.post('/api/namorados/quiz', async (req, res) => {
         }
       });
       
-      // Atualiza status do casal para COMPLETED
       await prisma.casal.update({
         where: { id: casalId },
         data: { status: 'COMPLETED' }
       });
       
-      // Busca todas as respostas do casal para gerar os PDFs
       const todasRespostas = await prisma.resposta.findMany({
         where: { casalId: casalId }
       });
@@ -209,9 +190,9 @@ app.post('/api/namorados/quiz', async (req, res) => {
       const comprador = todasRespostas.find(r => r.tipoUsuario === 'COMPRADOR');
       const presenteadoResposta = todasRespostas.find(r => r.tipoUsuario === 'PRESENTEADO');
       
-      // DISPARA GERAÇÃO DOS PDFS (assíncrono - não segura a resposta)
+      // Executa em background para liberar o HTTP rapidamente
       gerarPDFsEAnalise(comprador, presenteadoResposta, casal.mensagem).catch(err => {
-        console.error('Erro ao gerar PDFs:', err);
+        console.error('❌ Erro em background ao gerar PDFs:', err);
       });
       
       return res.status(200).json({
@@ -221,11 +202,7 @@ app.post('/api/namorados/quiz', async (req, res) => {
       });
     }
     
-    // Caso não se encaixe em nenhum dos cenários
-    return res.status(400).json({
-      success: false,
-      error: 'Requisição inválida. Verifique os dados enviados.'
-    });
+    return res.status(400).json({ success: false, error: 'Requisição inválida. Verifique os dados enviados.' });
     
   } catch (error) {
     console.error('❌ [Namorados] Erro:', error);
@@ -237,16 +214,6 @@ app.post('/api/namorados/quiz', async (req, res) => {
   }
 });
 
-// Função auxiliar para gerar PDFs (implemente depois)
-async function gerarPDFsEAnalise(comprador, presenteado, mensagem) {
-  console.log('🎯 Gerando análise para casal:', comprador.casalId);
-  console.log('Comprador:', comprador.nome);
-  console.log('Presenteado:', presenteado.nome);
-  console.log('Mensagem:', mensagem);
-  
-  // Aqui você vai implementar a lógica da IA e geração de PDFs
-  // Por enquanto só um log
-}
 // ===========================================
 // ROTA PARA SALVAR LEAD DA TPM (POST)
 // ===========================================
