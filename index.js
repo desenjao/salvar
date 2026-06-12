@@ -115,16 +115,16 @@ app.post('/api/namorados/quiz', async (req, res) => {
         });
         
         // Alinhado com o model 'Resposta' no singular do seu schema
-        const resposta = await tx.resposta.create({
-          data: {
-            casalId: novoCasal.id,
-            tipoUsuario: 'COMPRADOR',
-            nome: nome.trim(),
-            telefone: telefone || null,
-            email: email || null,
-            anamnese: anamnese || {},
-            relacionamento: relacionamento || {}
-          }
+       const resposta = await tx.resposta.create({
+    data: {
+      casalId: novoCasal.id,
+      tipoUsuario: 'COMPRADOR',
+      nome: nome.trim(),
+      telefone: telefone || null,
+      email: email || null,
+      anamnese: anamnese || {},
+      relacionamento: relacionamento || {}
+    }
         });
         
         return { novoCasal, resposta };
