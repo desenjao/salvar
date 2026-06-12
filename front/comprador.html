@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Thaís Coelho Nutrição | Análise Nutricional para Casais - Dia dos Namorados</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-page: #FEF6F6;
+            --white-card: #FFFFFF;
+            --rose-light: #FDE8E8;
+            --rose-primary: #D6586A;
+            --rose-dark: #B83B4D;
+            --rose-highlight: #E87A8E;
+            --text-dark: #2C3E2F;
+            --text-light: #6B7C6E;
+            --border-light: #F0E2E2;
+            --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 8px 28px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.08);
+            --error-red: #e74c3c;
+            --success-green: #2D6A4F;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #FEF6F6 0%, #F9FBF8 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Romântico */
+        .hero-section {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--rose-primary), var(--rose-dark));
+            border-radius: 48px;
+            margin-bottom: 32px;
+            color: white;
+            box-shadow: var(--shadow-lg);
+        }
+        .hero-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+        .hero-subtitle {
+            font-size: 1rem;
+            opacity: 0.95;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--white-card);
+            border-radius: 32px;
+            padding: 32px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--rose-primary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 4px solid var(--rose-primary);
+            padding-left: 16px;
+        }
+
+        /* Botões */
+        .btn-primary, .btn-secondary {
+            background: linear-gradient(135deg, var(--rose-primary), var(--rose-dark));
+            color: white;
+            padding: 16px 32px;
+            border-radius: 60px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            max-width: 320px;
+            margin: 12px auto;
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Formulário Profissional */
+        .form-group {
+            margin-bottom: 24px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+        .form-group label .required {
+            color: var(--error-red);
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--border-light);
+            border-radius: 16px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--rose-primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(214, 88, 106, 0.1);
+        }
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 8px;
+        }
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .radio-option input[type="radio"] {
+            width: auto;
+            accent-color: var(--rose-primary);
+        }
+
+        /* Badge Romântica */
+        .romantic-badge {
+            background: linear-gradient(135deg, var(--rose-light), #FFF0F0);
+            padding: 20px;
+            border-radius: 24px;
+            text-align: center;
+            margin: 20px 0;
+            border: 1px dashed var(--rose-primary);
+        }
+        .romantic-badge i {
+            font-size: 32px;
+            color: var(--rose-primary);
+            margin-bottom: 12px;
+        }
+
+        /* Loading */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(12px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .loading-card {
+            background: white;
+            border-radius: 48px;
+            padding: 48px;
+            text-align: center;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 32px 20px;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            border-top: 1px solid var(--border-light);
+            margin-top: 40px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 16px;
+            }
+            .hero-title {
+                font-size: 1.5rem;
+            }
+            .card {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Hero romântico -->
+    <div class="hero-section">
+        <div class="hero-icon">
+            <i class="fas fa-heartbeat"></i> <i class="fas fa-heart"></i>
+        </div>
+        <h1 class="hero-title">💑 Análise Nutricional do Casal</h1>
+        <p class="hero-subtitle">Um presente que cuida da saúde e do amor de vocês ❤️</p>
+    </div>
+
+    <!-- Área dinâmica -->
+    <div id="app"></div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>© 2026 · Thaís Coelho Nutrição · CRN: 123456</p>
+        <p style="margin-top: 8px;">Atendimento conforme Resolução CFN nº 600/2018</p>
+    </div>
+</div>
+
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-card">
+        <i class="fas fa-heart" style="font-size: 48px; color: var(--rose-primary); animation: pulse 1s infinite;"></i>
+        <p style="margin-top: 20px;">Processando seu presente...</p>
+    </div>
+</div>
+
+<script>
+    // Estado da aplicação
+    let currentStep = 'landing'; // landing, checkout, anamnese, relacionamento, final
+    let purchaseCompleted = false;
+    let formData = {
+        // Dados do comprador
+        nome: '',
+        email: '',
+        telefone: '',
+        
+        // Anamnese nutricional (comprador)
+        anamnese: {
+            idade: '',
+            sexo: '',
+            peso: '',
+            altura: '',
+            objetivos: [],
+            restricoes: '',
+            medicamentos: '',
+            atividades_fisicas: '',
+            historico_saude: ''
+        },
+        
+        // Dados do relacionamento
+        relacionamento: {
+            nome_conjuge: '',
+            objetivos_casal: [],
+            rotina_refeicoes: '',
+            desafios_juntos: '',
+            motivacao: ''
+        }
+    };
+
+    const API_URL = '/api/namorados/quiz';
+
+    function showLoading(show) {
+        document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
+    }
+
+    function showError(message) {
+        alert('⚠️ ' + message);
+    }
+
+    // Landing Page (Apresentação do serviço)
+    function renderLanding() {
+        return `
+            <div class="card">
+                <div class="romantic-badge">
+                    <i class="fas fa-gift"></i>
+                    <h3>✨ Presenteie seu amor com saúde! ✨</h3>
+                    <p style="margin-top: 8px;">Uma análise nutricional personalizada para o casal</p>
+                </div>
+                
+                <h3 class="section-title">
+                    <i class="fas fa-clipboard-list"></i>
+                    Como funciona?
+                </h3>
+                
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div style="display: flex; gap: 16px; align-items: start;">
+                        <div style="background: var(--rose-light); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-shopping-cart" style="color: var(--rose-primary);"></i>
+                        </div>
+                        <div>
+                            <strong>1. Adquira o presente</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-light);">Escolha o presente ideal para seu amor</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 16px; align-items: start;">
+                        <div style="background: var(--rose-light); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-notes-medical"></i>
+                        </div>
+                        <div>
+                            <strong>2. Preencha a anamnese nutricional</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-light);">Dados de saúde seguindo normas do CFN</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 16px; align-items: start;">
+                        <div style="background: var(--rose-light); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div>
+                            <strong>3. Compartilhe com seu parceiro(a)</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-light);">Ele/ela receberá um link para preencher sua parte</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 16px; align-items: start;">
+                        <div style="background: var(--rose-light); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div>
+                            <strong>4. Recebam a análise completa</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-light);">Em até 48h no e-mail de vocês</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="romantic-badge" style="margin-top: 24px;">
+                    <i class="fas fa-tag"></i>
+                    <h3>💝 Oferta especial Dia dos Namorados</h3>
+                    <p>De R$ 197,00 por apenas <strong style="font-size: 1.8rem; color: var(--rose-primary);">R$ 97,00</strong></p>
+                    <button class="btn-primary" onclick="startCheckout()">
+                        <i class="fas fa-gift"></i> Quero Presentear Agora
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    // Checkout (simulado)
+    function renderCheckout() {
+        return `
+            <div class="card">
+                <h2 class="section-title">
+                    <i class="fas fa-credit-card"></i>
+                    Finalizar Compra
+                </h2>
+                
+                <div class="form-group">
+                    <label>Seu nome completo <span class="required">*</span></label>
+                    <input type="text" id="nomeComprador" placeholder="Ex: Ana Silva" value="${formData.nome}">
+                </div>
+                
+                <div class="form-group">
+                    <label>E-mail <span class="required">*</span></label>
+                    <input type="email" id="emailComprador" placeholder="exemplo@email.com" value="${formData.email}">
+                </div>
+                
+                <div class="form-group">
+                    <label>WhatsApp (com DDD) <span class="required">*</span></label>
+                    <input type="tel" id="telefoneComprador" placeholder="(11) 99999-9999" value="${formData.telefone}">
+                </div>
+                
+                <div class="romantic-badge">
+                    <i class="fas fa-lock"></i>
+                    <p style="font-size: 0.85rem;">🔒 Pagamento 100% seguro · Ambiente criptografado</p>
+                </div>
+                
+                <button class="btn-primary" onclick="processPurchase()">
+                    <i class="fas fa-check-circle"></i> Confirmar Compra (R$ 97,00)
+                </button>
+                <button class="btn-secondary" onclick="backToLanding()">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </button>
+            </div>
+        `;
+    }
+
+    // Anamnese Nutricional (Profissional)
+    function renderAnamnese() {
+        return `
+            <div class="card">
+                <h2 class="section-title">
+                    <i class="fas fa-notes-medical"></i>
+                    Anamnese Nutricional (Sua parte)
+                </h2>
+                <p style="margin-bottom: 24px; color: var(--text-light);">✓ Dados conforme Resolução CFN nº 600/2018</p>
+                
+                <div class="form-group">
+                    <label>Idade <span class="required">*</span></label>
+                    <input type="number" id="idade" placeholder="Sua idade" value="${formData.anamnese.idade}">
+                </div>
+                
+                <div class="form-group">
+                    <label>Sexo biológico <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label class="radio-option"><input type="radio" name="sexo" value="Feminino" ${formData.anamnese.sexo === 'Feminino' ? 'checked' : ''}> Feminino</label>
+                        <label class="radio-option"><input type="radio" name="sexo" value="Masculino" ${formData.anamnese.sexo === 'Masculino' ? 'checked' : ''}> Masculino</label>
+                        <label class="radio-option"><input type="radio" name="sexo" value="Outro" ${formData.anamnese.sexo === 'Outro' ? 'checked' : ''}> Outro</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Peso atual (kg) <span class="required">*</span></label>
+                    <input type="number" step="0.1" id="peso" placeholder="Ex: 65.5" value="${formData.anamnese.peso}">
+                </div>
+                
+                <div class="form-group">
+                    <label>Altura (cm) <span class="required">*</span></label>
+                    <input type="number" step="1" id="altura" placeholder="Ex: 165" value="${formData.anamnese.altura}">
+                </div>
+                
+                <div class="form-group">
+                    <label>Objetivos nutricionais (pode marcar mais de um)</label>
+                    <div class="radio-group">
+                        <label class="radio-option"><input type="checkbox" value="Emagrecimento" ${formData.anamnese.objetivos.includes('Emagrecimento') ? 'checked' : ''}> Emagrecimento</label>
+                        <label class="radio-option"><input type="checkbox" value="Ganho de massa muscular" ${formData.anamnese.objetivos.includes('Ganho de massa muscular') ? 'checked' : ''}> Ganho de massa muscular</label>
+                        <label class="radio-option"><input type="checkbox" value="Melhorar alimentação" ${formData.anamnese.objetivos.includes('Melhorar alimentação') ? 'checked' : ''}> Melhorar alimentação</label>
+                        <label class="radio-option"><input type="checkbox" value="Saúde preventiva" ${formData.anamnese.objetivos.includes('Saúde preventiva') ? 'checked' : ''}> Saúde preventiva</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Restrições alimentares / alergias</label>
+                    <textarea id="restricoes" rows="2" placeholder="Ex: lactose, glúten, castanhas...">${formData.anamnese.restricoes}</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Uso de medicamentos contínuos</label>
+                    <textarea id="medicamentos" rows="2" placeholder="Informe se utiliza algum medicamento regularmente">${formData.anamnese.medicamentos}</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Prática de atividades físicas</label>
+                    <textarea id="atividades" rows="2" placeholder="Qual frequência? Quais modalidades?">${formData.anamnese.atividades_fisicas}</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Histórico de saúde relevante</label>
+                    <textarea id="historico" rows="2" placeholder="Diabetes, hipertensão, colesterol, etc.">${formData.anamnese.historico_saude}</textarea>
+                </div>
+                
+                <button class="btn-primary" onclick="saveAnamnese()">
+                    <i class="fas fa-heart"></i> Próximo: Sobre o Relacionamento
+                </button>
+            </div>
+        `;
+    }
+
+    // Questionário sobre o relacionamento (romântico)
+    function renderRelacionamento() {
+        return `
+            <div class="card">
+                <div class="romantic-badge">
+                    <i class="fas fa-heart"></i>
+                    <h3>💕 Agora, fale sobre o amor da sua vida! 💕</h3>
+                </div>
+                
+                <div class="form-group">
+                    <label>Nome do seu parceiro(a) presenteado(a) <span class="required">*</span></label>
+                    <input type="text" id="nomeConjuge" placeholder="Ex: João" value="${formData.relacionamento.nome_conjuge}">
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais objetivos de saúde vocês têm como casal?</label>
+                    <div class="radio-group">
+                        <label class="radio-option"><input type="checkbox" value="Emagrecer juntos" ${formData.relacionamento.objetivos_casal.includes('Emagrecer juntos') ? 'checked' : ''}> Emagrecer juntos</label>
+                        <label class="radio-option"><input type="checkbox" value="Ganhar saúde" ${formData.relacionamento.objetivos_casal.includes('Ganhar saúde') ? 'checked' : ''}> Ganhar saúde</label>
+                        <label class="radio-option"><input type="checkbox" value="Melhorar disposição" ${formData.relacionamento.objetivos_casal.includes('Melhorar disposição') ? 'checked' : ''}> Melhorar disposição</label>
+                        <label class="radio-option"><input type="checkbox" value="Prevenir doenças" ${formData.relacionamento.objetivos_casal.includes('Prevenir doenças') ? 'checked' : ''}> Prevenir doenças</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Como é a rotina de refeições de vocês?</label>
+                    <textarea id="rotinaRefeicoes" rows="2" placeholder="Ex: Costumam comer juntos? Fazem muitas refeições fora?">${formData.relacionamento.rotina_refeicoes}</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais os maiores desafios de saúde que enfrentam juntos?</label>
+                    <textarea id="desafios" rows="2" placeholder="Ex: Falta de tempo para cozinhar, dificuldade em manter dieta...">${formData.relacionamento.desafios_juntos}</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>O que mais motiva vocês a cuidarem da saúde juntos?</label>
+                    <textarea id="motivacao" rows="2" placeholder="Ex: Queremos viver mais e melhor juntos...">${formData.relacionamento.motivacao}</textarea>
+                </div>
+                
+                <button class="btn-primary" onclick="submitFinal()">
+                    <i class="fas fa-gift"></i> Finalizar e Gerar Presente
+                </button>
+            </div>
+        `;
+    }
+
+    function renderFinal(link) {
+        return `
+            <div class="card">
+                <div class="romantic-badge">
+                    <i class="fas fa-check-circle" style="font-size: 48px;"></i>
+                    <h2>🎉 Presente gerado com sucesso! 🎉</h2>
+                    <p style="margin-top: 12px;">Agora compartilhe com seu amor:</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>🔗 Link exclusivo do casal:</label>
+                    <input type="text" id="shareLink" value="${link}" readonly style="background: #f5f5f5; text-align: center;">
+                </div>
+                
+                <button class="btn-primary" onclick="copyLink('${link}')">
+                    <i class="fas fa-copy"></i> Copiar Link
+                </button>
+                
+                <button class="btn-primary" onclick="shareWhatsApp('${link}')">
+                    <i class="fab fa-whatsapp"></i> Compartilhar no WhatsApp
+                </button>
+                
+                <div class="romantic-badge" style="margin-top: 24px;">
+                    <i class="fas fa-envelope"></i>
+                    <p>📧 Quando seu parceiro(a) responder, vocês receberão a análise completa no e-mail cadastrado em até 48h!</p>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderApp() {
+        const app = document.getElementById('app');
+        if (currentStep === 'landing') app.innerHTML = renderLanding();
+        else if (currentStep === 'checkout') app.innerHTML = renderCheckout();
+        else if (currentStep === 'anamnese') app.innerHTML = renderAnamnese();
+        else if (currentStep === 'relacionamento') app.innerHTML = renderRelacionamento();
+    }
+
+    // Funções globais
+    window.startCheckout = () => {
+        currentStep = 'checkout';
+        renderApp();
+    };
+    
+    window.backToLanding = () => {
+        currentStep = 'landing';
+        renderApp();
+    };
+    
+    window.processPurchase = () => {
+        const nome = document.getElementById('nomeComprador')?.value;
+        const email = document.getElementById('emailComprador')?.value;
+        const telefone = document.getElementById('telefoneComprador')?.value;
+        
+        if (!nome || !email || !telefone) {
+            showError('Preencha todos os campos!');
+            return;
+        }
+        
+        formData.nome = nome;
+        formData.email = email;
+        formData.telefone = telefone;
+        
+        currentStep = 'anamnese';
+        renderApp();
+    };
+    
+    window.saveAnamnese = () => {
+        formData.anamnese.idade = document.getElementById('idade')?.value || '';
+        const sexoRadio = document.querySelector('input[name="sexo"]:checked');
+        formData.anamnese.sexo = sexoRadio ? sexoRadio.value : '';
+        formData.anamnese.peso = document.getElementById('peso')?.value || '';
+        formData.anamnese.altura = document.getElementById('altura')?.value || '';
+        
+        const objetivos = [];
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            if (cb.value && cb.checked) objetivos.push(cb.value);
+        });
+        formData.anamnese.objetivos = objetivos;
+        formData.anamnese.restricoes = document.getElementById('restricoes')?.value || '';
+        formData.anamnese.medicamentos = document.getElementById('medicamentos')?.value || '';
+        formData.anamnese.atividades_fisicas = document.getElementById('atividades')?.value || '';
+        formData.anamnese.historico_saude = document.getElementById('historico')?.value || '';
+        
+        if (!formData.anamnese.idade || !formData.anamnese.sexo || !formData.anamnese.peso || !formData.anamnese.altura) {
+            showError('Preencha todos os campos obrigatórios da anamnese!');
+            return;
+        }
+        
+        currentStep = 'relacionamento';
+        renderApp();
+    };
+    
+    window.submitFinal = () => {
+        formData.relacionamento.nome_conjuge = document.getElementById('nomeConjuge')?.value || '';
+        
+        const objetivosCasal = [];
+        document.querySelectorAll('#relacionamento input[type="checkbox"]').forEach(cb => {
+            if (cb.value && cb.checked) objetivosCasal.push(cb.value);
+        });
+        formData.relacionamento.objetivos_casal = objetivosCasal;
+        formData.relacionamento.rotina_refeicoes = document.getElementById('rotinaRefeicoes')?.value || '';
+        formData.relacionamento.desafios_juntos = document.getElementById('desafios')?.value || '';
+        formData.relacionamento.motivacao = document.getElementById('motivacao')?.value || '';
+        
+        if (!formData.relacionamento.nome_conjuge) {
+            showError('Por favor, informe o nome do seu parceiro(a)!');
+            return;
+        }
+        
+        showLoading(true);
+        
+        setTimeout(() => {
+            showLoading(false);
+            const fakeLink = `${window.location.origin}/presenteado.html?casalId=love_${Date.now()}`;
+            currentStep = 'final';
+            renderApp();
+            window.renderFinalStatic = () => renderFinal(fakeLink);
+            document.getElementById('app').innerHTML = renderFinal(fakeLink);
+        }, 1500);
+    };
+    
+    window.copyLink = (link) => {
+        navigator.clipboard.writeText(link);
+        alert('✅ Link copiado! Compartilhe com seu amor ❤️');
+    };
+    
+    window.shareWhatsApp = (link) => {
+        const text = `💝 Olá amor! Preenchi nossa análise nutricional como presente de Dia dos Namorados. Agora é sua vez! Clique no link: ${link}`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    };
+    
+    renderApp();
+</script>
+</body>
+</html>

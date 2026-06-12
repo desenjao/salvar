@@ -10,4 +10,6 @@
  */
 export type * from './models/PacientePrevenda.ts'
 export type * from './models/PacienteTPM.ts'
+export type * from './models/Casal.ts'
+export type * from './models/Resposta.ts'
 export type * from './commonInputTypes.ts'

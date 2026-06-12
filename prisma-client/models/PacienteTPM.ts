@@ -45,6 +45,9 @@ export type PacienteTPMMinAggregateOutputType = {
   alimentacao: string | null
   emocional: string | null
   objetivo: string | null
+  sessionId: string | null
+  quizStartedAt: Date | null
+  quizCompletedAt: Date | null
   userAgent: string | null
   origem: string | null
   pagina: string | null
@@ -64,6 +67,9 @@ export type PacienteTPMMaxAggregateOutputType = {
   alimentacao: string | null
   emocional: string | null
   objetivo: string | null
+  sessionId: string | null
+  quizStartedAt: Date | null
+  quizCompletedAt: Date | null
   userAgent: string | null
   origem: string | null
   pagina: string | null
@@ -83,6 +89,9 @@ export type PacienteTPMCountAggregateOutputType = {
   alimentacao: number
   emocional: number
   objetivo: number
+  sessionId: number
+  quizStartedAt: number
+  quizCompletedAt: number
   userAgent: number
   origem: number
   pagina: number
@@ -112,6 +121,9 @@ export type PacienteTPMMinAggregateInputType = {
   alimentacao?: true
   emocional?: true
   objetivo?: true
+  sessionId?: true
+  quizStartedAt?: true
+  quizCompletedAt?: true
   userAgent?: true
   origem?: true
   pagina?: true
@@ -131,6 +143,9 @@ export type PacienteTPMMaxAggregateInputType = {
   alimentacao?: true
   emocional?: true
   objetivo?: true
+  sessionId?: true
+  quizStartedAt?: true
+  quizCompletedAt?: true
   userAgent?: true
   origem?: true
   pagina?: true
@@ -150,6 +165,9 @@ export type PacienteTPMCountAggregateInputType = {
   alimentacao?: true
   emocional?: true
   objetivo?: true
+  sessionId?: true
+  quizStartedAt?: true
+  quizCompletedAt?: true
   userAgent?: true
   origem?: true
   pagina?: true
@@ -256,6 +274,9 @@ export type PacienteTPMGroupByOutputType = {
   alimentacao: string | null
   emocional: string | null
   objetivo: string | null
+  sessionId: string | null
+  quizStartedAt: Date | null
+  quizCompletedAt: Date | null
   userAgent: string | null
   origem: string | null
   pagina: string | null
@@ -298,6 +319,9 @@ export type PacienteTPMWhereInput = {
   alimentacao?: Prisma.StringNullableFilter<"PacienteTPM"> | string | null
   emocional?: Prisma.StringNullableFilter<"PacienteTPM"> | string | null
   objetivo?: Prisma.StringNullableFilter<"PacienteTPM"> | string | null
+  sessionId?: Prisma.StringNullableFilter<"PacienteTPM"> | string | null
+  quizStartedAt?: Prisma.DateTimeNullableFilter<"PacienteTPM"> | Date | string | null
+  quizCompletedAt?: Prisma.DateTimeNullableFilter<"PacienteTPM"> | Date | string | null
   userAgent?: Prisma.StringNullableFilter<"PacienteTPM"> | string | null
   origem?: Prisma.StringNullableFilter<"PacienteTPM"> | string | null
   pagina?: Prisma.StringNullableFilter<"PacienteTPM"> | string | null
@@ -317,6 +341,9 @@ export type PacienteTPMOrderByWithRelationInput = {
   alimentacao?: Prisma.SortOrderInput | Prisma.SortOrder
   emocional?: Prisma.SortOrderInput | Prisma.SortOrder
   objetivo?: Prisma.SortOrderInput | Prisma.SortOrder
+  sessionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  quizStartedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  quizCompletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   origem?: Prisma.SortOrderInput | Prisma.SortOrder
   pagina?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -339,6 +366,9 @@ export type PacienteTPMWhereUniqueInput = Prisma.AtLeast<{
   alimentacao?: Prisma.StringNullableFilter<"PacienteTPM"> | string | null
   emocional?: Prisma.StringNullableFilter<"PacienteTPM"> | string | null
   objetivo?: Prisma.StringNullableFilter<"PacienteTPM"> | string | null
+  sessionId?: Prisma.StringNullableFilter<"PacienteTPM"> | string | null
+  quizStartedAt?: Prisma.DateTimeNullableFilter<"PacienteTPM"> | Date | string | null
+  quizCompletedAt?: Prisma.DateTimeNullableFilter<"PacienteTPM"> | Date | string | null
   userAgent?: Prisma.StringNullableFilter<"PacienteTPM"> | string | null
   origem?: Prisma.StringNullableFilter<"PacienteTPM"> | string | null
   pagina?: Prisma.StringNullableFilter<"PacienteTPM"> | string | null
@@ -358,6 +388,9 @@ export type PacienteTPMOrderByWithAggregationInput = {
   alimentacao?: Prisma.SortOrderInput | Prisma.SortOrder
   emocional?: Prisma.SortOrderInput | Prisma.SortOrder
   objetivo?: Prisma.SortOrderInput | Prisma.SortOrder
+  sessionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  quizStartedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  quizCompletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   origem?: Prisma.SortOrderInput | Prisma.SortOrder
   pagina?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -385,6 +418,9 @@ export type PacienteTPMScalarWhereWithAggregatesInput = {
   alimentacao?: Prisma.StringNullableWithAggregatesFilter<"PacienteTPM"> | string | null
   emocional?: Prisma.StringNullableWithAggregatesFilter<"PacienteTPM"> | string | null
   objetivo?: Prisma.StringNullableWithAggregatesFilter<"PacienteTPM"> | string | null
+  sessionId?: Prisma.StringNullableWithAggregatesFilter<"PacienteTPM"> | string | null
+  quizStartedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"PacienteTPM"> | Date | string | null
+  quizCompletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"PacienteTPM"> | Date | string | null
   userAgent?: Prisma.StringNullableWithAggregatesFilter<"PacienteTPM"> | string | null
   origem?: Prisma.StringNullableWithAggregatesFilter<"PacienteTPM"> | string | null
   pagina?: Prisma.StringNullableWithAggregatesFilter<"PacienteTPM"> | string | null
@@ -403,6 +439,9 @@ export type PacienteTPMCreateInput = {
   alimentacao?: string | null
   emocional?: string | null
   objetivo?: string | null
+  sessionId?: string | null
+  quizStartedAt?: Date | string | null
+  quizCompletedAt?: Date | string | null
   userAgent?: string | null
   origem?: string | null
   pagina?: string | null
@@ -422,6 +461,9 @@ export type PacienteTPMUncheckedCreateInput = {
   alimentacao?: string | null
   emocional?: string | null
   objetivo?: string | null
+  sessionId?: string | null
+  quizStartedAt?: Date | string | null
+  quizCompletedAt?: Date | string | null
   userAgent?: string | null
   origem?: string | null
   pagina?: string | null
@@ -440,6 +482,9 @@ export type PacienteTPMUpdateInput = {
   alimentacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emocional?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objetivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quizStartedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  quizCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pagina?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -459,6 +504,9 @@ export type PacienteTPMUncheckedUpdateInput = {
   alimentacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emocional?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objetivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quizStartedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  quizCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pagina?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -478,6 +526,9 @@ export type PacienteTPMCreateManyInput = {
   alimentacao?: string | null
   emocional?: string | null
   objetivo?: string | null
+  sessionId?: string | null
+  quizStartedAt?: Date | string | null
+  quizCompletedAt?: Date | string | null
   userAgent?: string | null
   origem?: string | null
   pagina?: string | null
@@ -496,6 +547,9 @@ export type PacienteTPMUpdateManyMutationInput = {
   alimentacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emocional?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objetivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quizStartedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  quizCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pagina?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -515,6 +569,9 @@ export type PacienteTPMUncheckedUpdateManyInput = {
   alimentacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emocional?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objetivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quizStartedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  quizCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pagina?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -534,6 +591,9 @@ export type PacienteTPMCountOrderByAggregateInput = {
   alimentacao?: Prisma.SortOrder
   emocional?: Prisma.SortOrder
   objetivo?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
+  quizStartedAt?: Prisma.SortOrder
+  quizCompletedAt?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
   origem?: Prisma.SortOrder
   pagina?: Prisma.SortOrder
@@ -557,6 +617,9 @@ export type PacienteTPMMaxOrderByAggregateInput = {
   alimentacao?: Prisma.SortOrder
   emocional?: Prisma.SortOrder
   objetivo?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
+  quizStartedAt?: Prisma.SortOrder
+  quizCompletedAt?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
   origem?: Prisma.SortOrder
   pagina?: Prisma.SortOrder
@@ -576,6 +639,9 @@ export type PacienteTPMMinOrderByAggregateInput = {
   alimentacao?: Prisma.SortOrder
   emocional?: Prisma.SortOrder
   objetivo?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
+  quizStartedAt?: Prisma.SortOrder
+  quizCompletedAt?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
   origem?: Prisma.SortOrder
   pagina?: Prisma.SortOrder
@@ -601,6 +667,9 @@ export type PacienteTPMSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   alimentacao?: boolean
   emocional?: boolean
   objetivo?: boolean
+  sessionId?: boolean
+  quizStartedAt?: boolean
+  quizCompletedAt?: boolean
   userAgent?: boolean
   origem?: boolean
   pagina?: boolean
@@ -620,6 +689,9 @@ export type PacienteTPMSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   alimentacao?: boolean
   emocional?: boolean
   objetivo?: boolean
+  sessionId?: boolean
+  quizStartedAt?: boolean
+  quizCompletedAt?: boolean
   userAgent?: boolean
   origem?: boolean
   pagina?: boolean
@@ -639,6 +711,9 @@ export type PacienteTPMSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   alimentacao?: boolean
   emocional?: boolean
   objetivo?: boolean
+  sessionId?: boolean
+  quizStartedAt?: boolean
+  quizCompletedAt?: boolean
   userAgent?: boolean
   origem?: boolean
   pagina?: boolean
@@ -658,6 +733,9 @@ export type PacienteTPMSelectScalar = {
   alimentacao?: boolean
   emocional?: boolean
   objetivo?: boolean
+  sessionId?: boolean
+  quizStartedAt?: boolean
+  quizCompletedAt?: boolean
   userAgent?: boolean
   origem?: boolean
   pagina?: boolean
@@ -666,7 +744,7 @@ export type PacienteTPMSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PacienteTPMOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "telefone" | "email" | "mensagem" | "faseTpm" | "compulsao" | "alimentacao" | "emocional" | "objetivo" | "userAgent" | "origem" | "pagina" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["pacienteTPM"]>
+export type PacienteTPMOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "telefone" | "email" | "mensagem" | "faseTpm" | "compulsao" | "alimentacao" | "emocional" | "objetivo" | "sessionId" | "quizStartedAt" | "quizCompletedAt" | "userAgent" | "origem" | "pagina" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["pacienteTPM"]>
 
 export type $PacienteTPMPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "PacienteTPM"
@@ -682,6 +760,9 @@ export type $PacienteTPMPayload<ExtArgs extends runtime.Types.Extensions.Interna
     alimentacao: string | null
     emocional: string | null
     objetivo: string | null
+    sessionId: string | null
+    quizStartedAt: Date | null
+    quizCompletedAt: Date | null
     userAgent: string | null
     origem: string | null
     pagina: string | null
@@ -1121,6 +1202,9 @@ export interface PacienteTPMFieldRefs {
   readonly alimentacao: Prisma.FieldRef<"PacienteTPM", 'String'>
   readonly emocional: Prisma.FieldRef<"PacienteTPM", 'String'>
   readonly objetivo: Prisma.FieldRef<"PacienteTPM", 'String'>
+  readonly sessionId: Prisma.FieldRef<"PacienteTPM", 'String'>
+  readonly quizStartedAt: Prisma.FieldRef<"PacienteTPM", 'DateTime'>
+  readonly quizCompletedAt: Prisma.FieldRef<"PacienteTPM", 'DateTime'>
   readonly userAgent: Prisma.FieldRef<"PacienteTPM", 'String'>
   readonly origem: Prisma.FieldRef<"PacienteTPM", 'String'>
   readonly pagina: Prisma.FieldRef<"PacienteTPM", 'String'>

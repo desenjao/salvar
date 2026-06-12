@@ -51,3 +51,13 @@ export type PacientePrevenda = Prisma.PacientePrevendaModel
  * 
  */
 export type PacienteTPM = Prisma.PacienteTPMModel
+/**
+ * Model Casal
+ * 
+ */
+export type Casal = Prisma.CasalModel
+/**
+ * Model Resposta
+ * 
+ */
+export type Resposta = Prisma.RespostaModel

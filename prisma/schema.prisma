@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../prisma-client"
+  provider = "prisma-client-js"  // 🟢 Corrigido: adicionado o "-js" no final
+  output   = "../prisma-client"  // Mantém para ele salvar na sua pasta customizada
 }
 
 datasource db {
@@ -21,6 +21,11 @@ model PacientePrevenda {
   energia     String
   compromisso String
   
+    // ⭐ NOVOS CAMPOS DE MÉTRICAS ⭐
+  sessionId     String?    // ID único do visitante
+  quizStartedAt DateTime?           // Quando começou o quiz (primeira resposta)
+  quizCompletedAt DateTime?         // Quando completou o formulário
+
   userAgent   String?
   origem      String?
   pagina      String   @default("quiz")
@@ -46,10 +51,42 @@ model PacienteTPM {
   emocional   String?   // Como fica emocionalmente (sensível, sem paciência, desanimada, fora de si)
   objetivo    String?   // O que gostaria de melhorar (parar compulsão, reduzir inchaço, controlar irritação, ter mais energia)
   
+  // ⭐ NOVOS CAMPOS DE MÉTRICAS ⭐
+  sessionId     String?    // ID único do visitante
+  quizStartedAt DateTime?           // Quando começou o quiz (primeira resposta)
+  quizCompletedAt DateTime?         // Quando completou o formulário
+
   userAgent   String?
   origem      String?   @default("quiz_semana_tpm")
   pagina      String?   @default("analise_tpm")
   status      String    @default("novo")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
+// Adiciona no seu schema.prisma
+
+model Casal {
+  id            String    @id @default(uuid())
+  mensagem      String?   // Mensagem personalizada do comprador
+  status        String    @default("PENDING") // PENDING, COMPLETED
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  respostas     Resposta[]
+}
+
+model Resposta {
+  id            String    @id @default(uuid())
+  casalId       String
+  tipoUsuario   String    // "COMPRADOR" ou "PRESENTEADO"
+  nome          String
+  telefone      String?
+  email         String?
+  anamnese      Json      // Respostas da anamnese individual
+  relacionamento Json     // Respostas sobre o relacionamento
+  createdAt     DateTime  @default(now())
+  
+  casal         Casal     @relation(fields: [casalId], references: [id], onDelete: Cascade)
+  
+  @@unique([casalId, tipoUsuario])
 }

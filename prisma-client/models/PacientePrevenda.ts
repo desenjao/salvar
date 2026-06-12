@@ -44,6 +44,9 @@ export type PacientePrevendaMinAggregateOutputType = {
   desafio: string | null
   energia: string | null
   compromisso: string | null
+  sessionId: string | null
+  quizStartedAt: Date | null
+  quizCompletedAt: Date | null
   userAgent: string | null
   origem: string | null
   pagina: string | null
@@ -62,6 +65,9 @@ export type PacientePrevendaMaxAggregateOutputType = {
   desafio: string | null
   energia: string | null
   compromisso: string | null
+  sessionId: string | null
+  quizStartedAt: Date | null
+  quizCompletedAt: Date | null
   userAgent: string | null
   origem: string | null
   pagina: string | null
@@ -80,6 +86,9 @@ export type PacientePrevendaCountAggregateOutputType = {
   desafio: number
   energia: number
   compromisso: number
+  sessionId: number
+  quizStartedAt: number
+  quizCompletedAt: number
   userAgent: number
   origem: number
   pagina: number
@@ -108,6 +117,9 @@ export type PacientePrevendaMinAggregateInputType = {
   desafio?: true
   energia?: true
   compromisso?: true
+  sessionId?: true
+  quizStartedAt?: true
+  quizCompletedAt?: true
   userAgent?: true
   origem?: true
   pagina?: true
@@ -126,6 +138,9 @@ export type PacientePrevendaMaxAggregateInputType = {
   desafio?: true
   energia?: true
   compromisso?: true
+  sessionId?: true
+  quizStartedAt?: true
+  quizCompletedAt?: true
   userAgent?: true
   origem?: true
   pagina?: true
@@ -144,6 +159,9 @@ export type PacientePrevendaCountAggregateInputType = {
   desafio?: true
   energia?: true
   compromisso?: true
+  sessionId?: true
+  quizStartedAt?: true
+  quizCompletedAt?: true
   userAgent?: true
   origem?: true
   pagina?: true
@@ -249,6 +267,9 @@ export type PacientePrevendaGroupByOutputType = {
   desafio: string
   energia: string
   compromisso: string
+  sessionId: string | null
+  quizStartedAt: Date | null
+  quizCompletedAt: Date | null
   userAgent: string | null
   origem: string | null
   pagina: string
@@ -290,6 +311,9 @@ export type PacientePrevendaWhereInput = {
   desafio?: Prisma.StringFilter<"PacientePrevenda"> | string
   energia?: Prisma.StringFilter<"PacientePrevenda"> | string
   compromisso?: Prisma.StringFilter<"PacientePrevenda"> | string
+  sessionId?: Prisma.StringNullableFilter<"PacientePrevenda"> | string | null
+  quizStartedAt?: Prisma.DateTimeNullableFilter<"PacientePrevenda"> | Date | string | null
+  quizCompletedAt?: Prisma.DateTimeNullableFilter<"PacientePrevenda"> | Date | string | null
   userAgent?: Prisma.StringNullableFilter<"PacientePrevenda"> | string | null
   origem?: Prisma.StringNullableFilter<"PacientePrevenda"> | string | null
   pagina?: Prisma.StringFilter<"PacientePrevenda"> | string
@@ -308,6 +332,9 @@ export type PacientePrevendaOrderByWithRelationInput = {
   desafio?: Prisma.SortOrder
   energia?: Prisma.SortOrder
   compromisso?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  quizStartedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  quizCompletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   origem?: Prisma.SortOrderInput | Prisma.SortOrder
   pagina?: Prisma.SortOrder
@@ -329,6 +356,9 @@ export type PacientePrevendaWhereUniqueInput = Prisma.AtLeast<{
   desafio?: Prisma.StringFilter<"PacientePrevenda"> | string
   energia?: Prisma.StringFilter<"PacientePrevenda"> | string
   compromisso?: Prisma.StringFilter<"PacientePrevenda"> | string
+  sessionId?: Prisma.StringNullableFilter<"PacientePrevenda"> | string | null
+  quizStartedAt?: Prisma.DateTimeNullableFilter<"PacientePrevenda"> | Date | string | null
+  quizCompletedAt?: Prisma.DateTimeNullableFilter<"PacientePrevenda"> | Date | string | null
   userAgent?: Prisma.StringNullableFilter<"PacientePrevenda"> | string | null
   origem?: Prisma.StringNullableFilter<"PacientePrevenda"> | string | null
   pagina?: Prisma.StringFilter<"PacientePrevenda"> | string
@@ -347,6 +377,9 @@ export type PacientePrevendaOrderByWithAggregationInput = {
   desafio?: Prisma.SortOrder
   energia?: Prisma.SortOrder
   compromisso?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  quizStartedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  quizCompletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   origem?: Prisma.SortOrderInput | Prisma.SortOrder
   pagina?: Prisma.SortOrder
@@ -373,6 +406,9 @@ export type PacientePrevendaScalarWhereWithAggregatesInput = {
   desafio?: Prisma.StringWithAggregatesFilter<"PacientePrevenda"> | string
   energia?: Prisma.StringWithAggregatesFilter<"PacientePrevenda"> | string
   compromisso?: Prisma.StringWithAggregatesFilter<"PacientePrevenda"> | string
+  sessionId?: Prisma.StringNullableWithAggregatesFilter<"PacientePrevenda"> | string | null
+  quizStartedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"PacientePrevenda"> | Date | string | null
+  quizCompletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"PacientePrevenda"> | Date | string | null
   userAgent?: Prisma.StringNullableWithAggregatesFilter<"PacientePrevenda"> | string | null
   origem?: Prisma.StringNullableWithAggregatesFilter<"PacientePrevenda"> | string | null
   pagina?: Prisma.StringWithAggregatesFilter<"PacientePrevenda"> | string
@@ -390,6 +426,9 @@ export type PacientePrevendaCreateInput = {
   desafio: string
   energia: string
   compromisso: string
+  sessionId?: string | null
+  quizStartedAt?: Date | string | null
+  quizCompletedAt?: Date | string | null
   userAgent?: string | null
   origem?: string | null
   pagina?: string
@@ -408,6 +447,9 @@ export type PacientePrevendaUncheckedCreateInput = {
   desafio: string
   energia: string
   compromisso: string
+  sessionId?: string | null
+  quizStartedAt?: Date | string | null
+  quizCompletedAt?: Date | string | null
   userAgent?: string | null
   origem?: string | null
   pagina?: string
@@ -425,6 +467,9 @@ export type PacientePrevendaUpdateInput = {
   desafio?: Prisma.StringFieldUpdateOperationsInput | string
   energia?: Prisma.StringFieldUpdateOperationsInput | string
   compromisso?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quizStartedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  quizCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pagina?: Prisma.StringFieldUpdateOperationsInput | string
@@ -443,6 +488,9 @@ export type PacientePrevendaUncheckedUpdateInput = {
   desafio?: Prisma.StringFieldUpdateOperationsInput | string
   energia?: Prisma.StringFieldUpdateOperationsInput | string
   compromisso?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quizStartedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  quizCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pagina?: Prisma.StringFieldUpdateOperationsInput | string
@@ -461,6 +509,9 @@ export type PacientePrevendaCreateManyInput = {
   desafio: string
   energia: string
   compromisso: string
+  sessionId?: string | null
+  quizStartedAt?: Date | string | null
+  quizCompletedAt?: Date | string | null
   userAgent?: string | null
   origem?: string | null
   pagina?: string
@@ -478,6 +529,9 @@ export type PacientePrevendaUpdateManyMutationInput = {
   desafio?: Prisma.StringFieldUpdateOperationsInput | string
   energia?: Prisma.StringFieldUpdateOperationsInput | string
   compromisso?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quizStartedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  quizCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pagina?: Prisma.StringFieldUpdateOperationsInput | string
@@ -496,6 +550,9 @@ export type PacientePrevendaUncheckedUpdateManyInput = {
   desafio?: Prisma.StringFieldUpdateOperationsInput | string
   energia?: Prisma.StringFieldUpdateOperationsInput | string
   compromisso?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quizStartedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  quizCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pagina?: Prisma.StringFieldUpdateOperationsInput | string
@@ -514,6 +571,9 @@ export type PacientePrevendaCountOrderByAggregateInput = {
   desafio?: Prisma.SortOrder
   energia?: Prisma.SortOrder
   compromisso?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
+  quizStartedAt?: Prisma.SortOrder
+  quizCompletedAt?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
   origem?: Prisma.SortOrder
   pagina?: Prisma.SortOrder
@@ -536,6 +596,9 @@ export type PacientePrevendaMaxOrderByAggregateInput = {
   desafio?: Prisma.SortOrder
   energia?: Prisma.SortOrder
   compromisso?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
+  quizStartedAt?: Prisma.SortOrder
+  quizCompletedAt?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
   origem?: Prisma.SortOrder
   pagina?: Prisma.SortOrder
@@ -554,6 +617,9 @@ export type PacientePrevendaMinOrderByAggregateInput = {
   desafio?: Prisma.SortOrder
   energia?: Prisma.SortOrder
   compromisso?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
+  quizStartedAt?: Prisma.SortOrder
+  quizCompletedAt?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
   origem?: Prisma.SortOrder
   pagina?: Prisma.SortOrder
@@ -572,6 +638,10 @@ export type StringFieldUpdateOperationsInput = {
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -598,6 +668,9 @@ export type PacientePrevendaSelect<ExtArgs extends runtime.Types.Extensions.Inte
   desafio?: boolean
   energia?: boolean
   compromisso?: boolean
+  sessionId?: boolean
+  quizStartedAt?: boolean
+  quizCompletedAt?: boolean
   userAgent?: boolean
   origem?: boolean
   pagina?: boolean
@@ -616,6 +689,9 @@ export type PacientePrevendaSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   desafio?: boolean
   energia?: boolean
   compromisso?: boolean
+  sessionId?: boolean
+  quizStartedAt?: boolean
+  quizCompletedAt?: boolean
   userAgent?: boolean
   origem?: boolean
   pagina?: boolean
@@ -634,6 +710,9 @@ export type PacientePrevendaSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   desafio?: boolean
   energia?: boolean
   compromisso?: boolean
+  sessionId?: boolean
+  quizStartedAt?: boolean
+  quizCompletedAt?: boolean
   userAgent?: boolean
   origem?: boolean
   pagina?: boolean
@@ -652,6 +731,9 @@ export type PacientePrevendaSelectScalar = {
   desafio?: boolean
   energia?: boolean
   compromisso?: boolean
+  sessionId?: boolean
+  quizStartedAt?: boolean
+  quizCompletedAt?: boolean
   userAgent?: boolean
   origem?: boolean
   pagina?: boolean
@@ -660,7 +742,7 @@ export type PacientePrevendaSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PacientePrevendaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "telefone" | "mensagem" | "genero" | "idade" | "desafio" | "energia" | "compromisso" | "userAgent" | "origem" | "pagina" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["pacientePrevenda"]>
+export type PacientePrevendaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "telefone" | "mensagem" | "genero" | "idade" | "desafio" | "energia" | "compromisso" | "sessionId" | "quizStartedAt" | "quizCompletedAt" | "userAgent" | "origem" | "pagina" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["pacientePrevenda"]>
 
 export type $PacientePrevendaPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "PacientePrevenda"
@@ -675,6 +757,9 @@ export type $PacientePrevendaPayload<ExtArgs extends runtime.Types.Extensions.In
     desafio: string
     energia: string
     compromisso: string
+    sessionId: string | null
+    quizStartedAt: Date | null
+    quizCompletedAt: Date | null
     userAgent: string | null
     origem: string | null
     pagina: string
@@ -1113,6 +1198,9 @@ export interface PacientePrevendaFieldRefs {
   readonly desafio: Prisma.FieldRef<"PacientePrevenda", 'String'>
   readonly energia: Prisma.FieldRef<"PacientePrevenda", 'String'>
   readonly compromisso: Prisma.FieldRef<"PacientePrevenda", 'String'>
+  readonly sessionId: Prisma.FieldRef<"PacientePrevenda", 'String'>
+  readonly quizStartedAt: Prisma.FieldRef<"PacientePrevenda", 'DateTime'>
+  readonly quizCompletedAt: Prisma.FieldRef<"PacientePrevenda", 'DateTime'>
   readonly userAgent: Prisma.FieldRef<"PacientePrevenda", 'String'>
   readonly origem: Prisma.FieldRef<"PacientePrevenda", 'String'>
   readonly pagina: Prisma.FieldRef<"PacientePrevenda", 'String'>

@@ -4,3 +4,6 @@ node_modules
 
 /generated/prisma
 logs
+node_modules
+.env
+prisma-client
