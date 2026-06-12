@@ -213,6 +213,68 @@ app.post('/api/namorados/quiz', async (req, res) => {
     });
   }
 });
+app.get('/api/namorados/quiz', async (req, res) => {
+  try {
+    const { casalId } = req.query;
+
+    // Validação básica se o ID foi enviado
+    if (!casalId) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'O parâmetro casalId é obrigatório na URL.' 
+      });
+    }
+
+    // Busca o casal e traz junto todas as respostas atreladas a ele
+    const casal = await prisma.casal.findUnique({
+      where: { id: casalId },
+      include: { respostas: true }
+    });
+
+    // Se não encontrar o registro do casal
+    if (!casal) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Link inválido. Quiz ou casal não encontrado.' 
+      });
+    }
+
+    // Separa as respostas para facilitar o uso no Frontend
+    const comprador = casal.respostas.find(r => r.tipoUsuario === 'COMPRADOR');
+    const presenteado = casal.respostas.find(r => r.tipoUsuario === 'PRESENTEADO');
+
+    // Retorno de sucesso com a estrutura organizada
+    return res.status(200).json({
+      success: true,
+      data: {
+        id: casal.id,
+        status: casal.status,
+        mensagem: casal.mensagem,
+        criadoEm: casal.createdAt, // Ou o nome do campo de data que tiver no seu schema
+        comprador: comprador ? {
+          nome: comprador.nome,
+          // Evite expor dados sensíveis se for apenas a tela de convite, 
+          // mas se precisar para o painel final, pode descomentar abaixo:
+          // email: comprador.email,
+          // telefone: comprador.telefone,
+          // anamnese: comprador.anamnese,
+          // relacionamento: comprador.relacionamento
+        } : null,
+        presenteadoJaRespondeu: !!presenteado,
+        // Se o quiz já foi finalizado, você pode liberar os dados completos se necessário
+        respostasCompletas: casal.status === 'COMPLETED' ? casal.respostas : null
+      }
+    });
+
+  } catch (error) {
+    console.error('❌ [Namorados GET] Erro:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Erro interno ao buscar os dados do quiz.',
+      message: error.message
+    });
+  }
+});
 
 // ===========================================
 // ROTA PARA SALVAR LEAD DA TPM (POST)
